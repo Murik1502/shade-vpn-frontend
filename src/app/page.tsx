@@ -29,7 +29,7 @@ export default function Home() {
           return
         }
 
-        toast.success(resp.data.result)
+        webApp?.openInvoice(resp.data.result)
       })
       .catch(e => {
         toast.error(e.message)
