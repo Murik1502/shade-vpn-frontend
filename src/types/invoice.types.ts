@@ -4,5 +4,6 @@ export interface IInvoice {
 
 export interface IInvoiceResponse {
   ok: boolean
-  result: string
+  result?: string
+  errorMessage?: string
 }
