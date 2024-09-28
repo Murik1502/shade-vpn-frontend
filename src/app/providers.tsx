@@ -2,6 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { retrieveLaunchParams } from '@telegram-apps/sdk'
 import Script from 'next/script'
 import {
   PropsWithChildren,
@@ -17,6 +18,7 @@ import { ITelegramUser, IWebApp } from '@/types/telegram.types'
 export interface ITelegramContext {
   webApp?: IWebApp
   user?: ITelegramUser
+  rawInitData?: string
 }
 
 export const TelegramContext = createContext<ITelegramContext>({})
@@ -33,12 +35,15 @@ export default function Providers({ children }: PropsWithChildren) {
   )
 
   const [webApp, setWebApp] = useState<IWebApp | null>(null)
+  const [rawInitData, setInitDataRaw] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     const app = (window as any).Telegram?.WebApp
     if (app) {
       app.ready()
       setWebApp(app)
+      const { initDataRaw } = retrieveLaunchParams()
+      setInitDataRaw(initDataRaw)
     }
   }, [])
 
@@ -47,7 +52,8 @@ export default function Providers({ children }: PropsWithChildren) {
       ? {
           webApp,
           unsafeData: webApp.initDataUnsafe,
-          user: webApp.initDataUnsafe.user
+          user: webApp.initDataUnsafe.user,
+          rawInitData
         }
       : {}
   }, [webApp])
