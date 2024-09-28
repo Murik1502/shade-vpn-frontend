@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { errorCatch } from './errors'
 import { getAccessToken } from '@/services/auth-token.service'
+import { authService } from '@/services/auth.service'
 
 const axiosConfig: CreateAxiosDefaults = {
   baseURL: process.env.NEXT_PUBLIC_API_URL
@@ -31,6 +32,23 @@ axiosWithAuth.interceptors.request.use(config => {
 axiosWithAuth.interceptors.response.use(
   config => config,
   async error => {
+    const originalRequest = error.config
+
+    if (
+      error.response?.statusCode === 404 &&
+      errorCatch(error) === 'User not found' &&
+      error.config &&
+      !error.config._isRetry
+    ) {
+      originalRequest._isRetry = true
+      try {
+        await authService.register()
+        return axiosWithAuth.request(originalRequest)
+      } catch (error) {
+        toast.error('Произошла неизвестная ошибка. Перезапустите приложение')
+      }
+    }
+
     if (
       (error.response?.statusCode === 401 ||
         errorCatch(error) === 'Invalid token or token expired') &&
