@@ -1,5 +1,6 @@
 'use client'
 
+import { retrieveLaunchParams } from '@telegram-apps/sdk'
 import { useState } from 'react'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -13,8 +14,17 @@ import { invoiceService } from '@/services/invoice.service'
 export default function Home() {
   const { webApp } = useTelegram()
 
+  const { initDataRaw } = retrieveLaunchParams()
+
   const [value, setValue] = useState(0)
   const { data, isLoading } = useUser()
+
+  const handleButtonClick = () => {
+    navigator.clipboard
+      .writeText(initDataRaw!)
+      .then(() => alert('Raw Init Data copied to clipboard!'))
+      .catch(() => alert('Failed to copy Raw Init Data to clipboard!'))
+  }
 
   const handleCreateInvoice = () => {
     invoiceService
@@ -76,6 +86,20 @@ export default function Home() {
             Подписка {value}
           </button>
         </div>
+        <button
+          style={{
+            padding: '10px',
+            background: 'transparent',
+            color: 'white',
+            border: '1px solid white',
+            borderRadius: '10px',
+            cursor: 'pointer',
+            alignSelf: 'center'
+          }}
+          onClick={handleButtonClick}
+        >
+          Copy Raw Init Data
+        </button>
       </main>
     </div>
   )
