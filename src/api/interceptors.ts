@@ -35,7 +35,6 @@ axiosWithAuth.interceptors.response.use(
     const originalRequest = error.config
 
     if (
-      error.response?.statusCode === 404 &&
       errorCatch(error) === 'User not found' &&
       error.config &&
       !error.config._isRetry
