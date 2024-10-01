@@ -1,5 +1,5 @@
 export interface IInvoice {
-  subscriptionId: number
+  subTypeId: number
 }
 
 export interface IInvoiceResponse {

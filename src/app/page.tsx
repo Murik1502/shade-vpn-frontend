@@ -26,7 +26,7 @@ export default function Home() {
   const handleCreateInvoice = () => {
     invoiceService
       .getInvoice({
-        subscriptionId: value
+        subTypeId: value
       })
       .then(resp => {
         console.log(resp)
