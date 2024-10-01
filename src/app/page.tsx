@@ -61,13 +61,14 @@ export default function Home() {
               <h1 className='text-3xl font-bold text-foreground'>
                 Привет, {data?.username || data?.firstName}!
                 <br />
-                {data?.subscriptionId
-                  ? `Твоя подписка - ${data.subscription.title}`
+                {data?.subscription
+                  ? `Подписка - ${data.subscription.type?.title}`
                   : 'У тебя нет подписки('}
               </h1>
             )}
           </div>
         </SkeletonTheme>
+
         <div className='flex gap-4 items-center flex-col sm:flex-row'>
           <input
             className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
