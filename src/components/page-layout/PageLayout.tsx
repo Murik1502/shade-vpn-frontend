@@ -11,7 +11,7 @@ export default function PageLayout({
 }) {
   return (
     <div className='w-full h-full flex flex-col'>
-      <main className='p-4 overflow-x-hidden max-h-screen relative'>
+      <main className='p-4 h-full overflow-x-hidden relative'>
         <SkeletonTheme
           baseColor='#202020'
           highlightColor='#444'

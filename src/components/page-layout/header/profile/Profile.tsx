@@ -45,7 +45,9 @@ export function Profile() {
           <div className={s.icon}>{name?.charAt(0)}</div>
 
           <div className='text-right mr-3'>
-            <p className={s.username}>{name}</p>
+            <p className={s.username}>
+              {name} | {data?.subscription?.type?.title || 'Подписки нет'}
+            </p>
           </div>
         </div>
       )}
