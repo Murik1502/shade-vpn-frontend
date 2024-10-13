@@ -45,4 +45,5 @@ export interface IWebApp {
   }
   HapticFeedback: any
   openInvoice: any
+  disableVerticalSwipes: any
 }

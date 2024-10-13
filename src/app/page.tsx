@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { toast } from 'sonner'
 
@@ -14,6 +15,10 @@ import { subscriptionService } from '@/services/subscription.service'
 
 export default function Home() {
   const { webApp } = useTelegram()
+
+  useEffect(() => {
+    webApp?.disableVerticalSwipes()
+  })
 
   const { data, isLoading } = useUser()
 
