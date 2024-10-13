@@ -1,0 +1,21 @@
+.username {
+  font-size: bold;
+}
+
+.avatar {
+  position: relative;
+}
+
+.icon {
+  display: flex;
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  line-height: 0%;
+  border: 1.58px solid var(--gray-d3, rgba(28, 28, 30, 1));
+}

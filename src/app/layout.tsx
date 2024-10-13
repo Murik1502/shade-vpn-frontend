@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import { Toaster } from 'sonner'
 
+import PageLayout from '@/components/page-layout/PageLayout'
+
 import { SITE_NAME } from '@/constants/seo.constants'
 
 import './globals.scss'
@@ -30,7 +32,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={` ${grandisExtended.variable} antialiased`}>
         <Providers>
-          {children}
+          <PageLayout>{children}</PageLayout>
           <Toaster
             theme='dark'
             position='top-center'
