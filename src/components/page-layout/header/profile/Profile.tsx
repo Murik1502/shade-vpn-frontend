@@ -24,7 +24,7 @@ export function Profile() {
   return (
     <div className={s.avatar}>
       {isLoading ? (
-        <div className='flex flex-row gap-3 h-fit items-start w-full'>
+        <div className='flex flex-row gap-3 h-fit items-start w-fit'>
           <Skeleton
             height={30}
             width={30}
@@ -39,7 +39,7 @@ export function Profile() {
         </div>
       ) : (
         <div
-          className='flex items-center gap-3'
+          className='flex items-center gap-3 w-fit'
           onClick={handleClick}
         >
           <div className={s.icon}>{name?.charAt(0)}</div>

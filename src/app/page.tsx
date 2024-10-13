@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { toast } from 'sonner'
 
@@ -11,17 +10,21 @@ import { useUser } from '@/hooks/useUser'
 
 import { useTelegram } from './providers'
 import { invoiceService } from '@/services/invoice.service'
+import { subscriptionService } from '@/services/subscription.service'
 
 export default function Home() {
   const { webApp } = useTelegram()
 
-  const [value, setValue] = useState(0)
   const { data, isLoading } = useUser()
 
-  const handleCreateInvoice = () => {
+  const handleCreateInvoice = (subType: number) => {
+    if (subType === 0) {
+      return subscriptionService.getFreeSubscription()
+    }
+
     invoiceService
       .getInvoice({
-        subTypeId: value
+        subTypeId: subType
       })
       .then(resp => {
         console.log(resp)
@@ -41,19 +44,24 @@ export default function Home() {
   return (
     <div className='flex flex-col  justify-center w-full gap-3'>
       {isLoading ? <WelcomeSignSkeleton /> : <WelcomeSign />}
-      <div className='flex gap-4 w-full items-center justify-center flex-col'>
-        <input
-          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
-          type='number'
-          placeholder='айди подписки'
-          value={value}
-          onChange={e => setValue(Number(e.target.value))}
-        />
+      <div className='flex gap-4 w-full items-center justify-center flex-row'>
         <button
           className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
-          onClick={handleCreateInvoice}
+          onClick={() => handleCreateInvoice(0)}
         >
-          Подписка {value}
+          Free
+        </button>
+        <button
+          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
+          onClick={() => handleCreateInvoice(2)}
+        >
+          Basic
+        </button>
+        <button
+          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
+          onClick={() => handleCreateInvoice(3)}
+        >
+          Premium
         </button>
       </div>
     </div>
