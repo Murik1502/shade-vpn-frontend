@@ -43,6 +43,17 @@ export interface IWebApp {
     isProgressVisible: boolean
     isActive: boolean
   }
+  CloudStorage: {
+    setItem(
+      key: any,
+      value: any,
+      callback?: () => {}
+    ): { error: string | null; isSuccess: boolean }
+    getItem(
+      key: any,
+      callback?: () => {}
+    ): { error: string | null; isSuccess: boolean }
+  }
   HapticFeedback: any
   openInvoice: any
   disableVerticalSwipes: any

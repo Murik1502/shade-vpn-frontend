@@ -30,7 +30,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={` ${grandisExtended.variable} antialiased`}>
+      <body
+        className={`${grandisExtended.variable} antialiased`}
+        style={{ height: 'var(--tg-viewport-height)' }}
+      >
         <Providers>
           <PageLayout>{children}</PageLayout>
           <Toaster
