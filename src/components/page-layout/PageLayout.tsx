@@ -11,16 +11,16 @@ export default function PageLayout({
 }) {
   return (
     <div className='w-full h-full flex flex-col'>
-      <main className='p-4 h-full overflow-x-hidden relative'>
-        <SkeletonTheme
-          baseColor='#202020'
-          highlightColor='#444'
-        >
-          <Header />
+      <SkeletonTheme
+        baseColor='#202020'
+        highlightColor='#444'
+      >
+        <Header />
+        <main className='p-4 pt-16 h-full flex flex-1 flex-col overflow-x-hidden relative'>
           {children}
-          <Navbar />
-        </SkeletonTheme>
-      </main>
+        </main>
+        <Navbar />
+      </SkeletonTheme>
     </div>
   )
 }
