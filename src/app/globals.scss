@@ -25,6 +25,7 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: 'Grandis Extended', Arial, Helvetica, sans-serif;
+  height: var(--tg-viewport-stable-height);
 }
 
 @layer utilities {
