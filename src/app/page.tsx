@@ -1,7 +1,6 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { toast } from 'sonner'
 
@@ -19,7 +18,6 @@ export default function Home() {
   const { webApp } = useTelegram()
   const router = useRouter()
   const { data, isLoading } = useUser()
-  const { isProccesing, setIsProccesing } = useState(false)
 
   const handleCreateInvoice = (subType: number) => {
     if (subType === 0) {
