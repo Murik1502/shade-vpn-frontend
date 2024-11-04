@@ -1,13 +1,19 @@
 'use client'
 
+import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { toast } from 'sonner'
+import 'swiper/css'
 
 import { BenefitsCard } from '@/components/ui/benefitsCard/BenefitsCard'
+import { PlanSwiper } from '@/components/ui/planSwiper/PlanSwiper'
 import { WelcomeSign } from '@/components/ui/welcomeSign/WelcomeSign'
 import { WelcomeSignSkeleton } from '@/components/ui/welcomeSign/WelcomeSignSkeleton'
 
+import { useSubs } from '@/hooks/useSubs'
 import { useUser } from '@/hooks/useUser'
 
 import { useTelegram } from './providers'
@@ -18,9 +24,15 @@ export default function Home() {
   const { webApp } = useTelegram()
   const router = useRouter()
   const { data, isLoading } = useUser()
+  const { data: subs, isLoading: subsLoading } = useSubs()
+
+  const [activeTab, setActiveTab] = useState(1)
+
+  const currentSub = subs?.[activeTab - 1].id || 0
 
   const handleCreateInvoice = (subType: number) => {
-    if (subType === 0) {
+    console.log('handleCreateInvoice', subType)
+    if (subType === 1) {
       return subscriptionService.getFreeSubscription()
     }
 
@@ -44,29 +56,51 @@ export default function Home() {
   }
 
   return (
-    <div className='p-4 flex flex-col w-full h-screen overflow-auto gap-3'>
+    <div className='pl-4 pr-4 flex flex-col w-full h-screen overflow-auto gap-3'>
       {isLoading ? <WelcomeSignSkeleton /> : <WelcomeSign />}
       <BenefitsCard />
-      <div className='flex gap-4 w-full items-center justify-center flex-row'>
-        <button
-          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
-          onClick={() => handleCreateInvoice(0)}
-        >
-          Free
-        </button>
-        <button
-          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
-          onClick={() => handleCreateInvoice(2)}
-        >
-          Basic
-        </button>
-        <button
-          className='w-full p-2 rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors bg-[#f2f2f2] dark:bg-[#1a1a1a] text-sm sm:text-base'
-          onClick={() => handleCreateInvoice(3)}
-        >
-          Premium
-        </button>
+      <div className='w-full h-fit flex justify-between items-center'>
+        <span className='text-xl font-medium'>
+          Выберите <br /> подходящий план
+        </span>
+        <span className='text-sm text-gray_d1'>
+          {activeTab} / {subs?.length}
+        </span>
       </div>
+
+      {subsLoading ? (
+        <div className='flex flex-row gap-3 h-fit items-start w-fit'>
+          <Skeleton
+            height={30}
+            width={30}
+            circle
+            containerClassName='flex'
+          />
+          <Skeleton
+            height={20}
+            width={120}
+            containerClassName='flex-1 rounded-xl'
+          />
+        </div>
+      ) : (
+        <PlanSwiper
+          data={subs!}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+        />
+      )}
+
+      <button
+        className={clsx(
+          'w-full h-12 font-medium rounded-xl',
+          currentSub > 1
+            ? 'bg-primary text-white border-primary'
+            : 'bg-transparent text-primary border-primary border'
+        )}
+        onClick={() => handleCreateInvoice(subs![activeTab - 1].id)}
+      >
+        {currentSub > 1 ? 'Подключить на месяц' : 'Отсавить базовый'}
+      </button>
     </div>
   )
 }
