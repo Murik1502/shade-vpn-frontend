@@ -46,7 +46,10 @@ export function Profile() {
 
           <div className='text-right mr-3'>
             <p className={s.username}>
-              {name} | {data?.subscription?.type?.title || 'Подписки нет'}
+              {name}{' '}
+              {data?.subscription?.type?.title
+                ? `| ${data?.subscription?.type?.title}`
+                : null}
             </p>
           </div>
         </div>

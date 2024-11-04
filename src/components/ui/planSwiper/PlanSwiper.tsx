@@ -46,7 +46,10 @@ export const PlanSwiper: FC<PlanSwiperProps> = ({
                 </span>
                 <div className='flex justify-between items-end'>
                   <span
-                    className='font-medium text-gray'
+                    className={clsx(
+                      'font-medium',
+                      index % 2 === 0 ? 'text-gray' : 'text-primary_l3'
+                    )}
                     style={{ lineHeight: '11px', fontSize: 12 }}
                   >
                     объем трафика

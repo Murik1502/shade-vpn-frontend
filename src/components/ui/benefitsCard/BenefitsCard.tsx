@@ -21,9 +21,9 @@ export function BenefitsCard() {
           </span>
         </div>
 
-        <div className='w-full flex gap-3 items-end'>
+        <div className='w-full flex gap-3 items-center'>
           <span className={s.devicesIcon}></span>
-          <span className='text-xs align-middle h-9 w-full font-medium text-gray pb-2 border-b border-gray_d2'>
+          <span className='text-xs align-middle h-fit w-full font-medium text-gray pb-2'>
             Поддержка на всех устройствах
           </span>
         </div>

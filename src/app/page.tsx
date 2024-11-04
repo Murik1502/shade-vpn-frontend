@@ -92,7 +92,7 @@ export default function Home() {
 
       <button
         className={clsx(
-          'w-full h-12 font-medium rounded-xl',
+          'w-full h-14 font-medium rounded-xl',
           currentSub > 1
             ? 'bg-primary text-white border-primary'
             : 'bg-transparent text-primary border-primary border'
