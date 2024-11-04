@@ -42,6 +42,7 @@ export default function Providers({ children }: PropsWithChildren) {
     if (app) {
       app.ready()
       setWebApp(app)
+      app.disableVerticalSwipes()
       const { initDataRaw } = retrieveLaunchParams()
       setInitDataRaw(initDataRaw)
     }
