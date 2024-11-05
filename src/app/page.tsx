@@ -1,6 +1,6 @@
 'use client'
 
-import { QueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -24,13 +24,7 @@ import { invoiceService } from '@/services/invoice.service'
 import { subscriptionService } from '@/services/subscription.service'
 
 export default function Home() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity
-      }
-    }
-  })
+  const queryClient = useQueryClient()
 
   const { webApp } = useTelegram()
   const router = useRouter()
@@ -49,8 +43,7 @@ export default function Home() {
     if (subType === 1) {
       return subscriptionService.getFreeSubscription().then(resp => {
         queryClient.invalidateQueries({
-          queryKey: ['user'],
-          refetchType: 'active'
+          queryKey: ['user']
         })
 
         toast.success('Подписка успешно активирована!', {
@@ -81,14 +74,24 @@ export default function Home() {
               id: toastId
             })
             queryClient.invalidateQueries({
-              queryKey: ['user'],
-              refetchType: 'active'
+              queryKey: ['user']
             })
-            return
           }
 
           if (invoiceClosed === 'failed') {
             toast.error('Произошла ошибка оплаты. Попробуйте ещё раз!!', {
+              id: toastId
+            })
+          }
+
+          if (invoiceClosed === 'cancelled') {
+            toast.info('Оплата подписки отменена', {
+              id: toastId
+            })
+          }
+
+          if (invoiceClosed === 'pending') {
+            toast.info('Оплата в процессе, ждем ответ от банка', {
               id: toastId
             })
           }
