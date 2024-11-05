@@ -1,5 +1,6 @@
 'use client'
 
+import { QueryClient } from '@tanstack/react-query'
 import clsx from 'clsx'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -23,37 +24,82 @@ import { invoiceService } from '@/services/invoice.service'
 import { subscriptionService } from '@/services/subscription.service'
 
 export default function Home() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity
+      }
+    }
+  })
+
   const { webApp } = useTelegram()
   const router = useRouter()
   const { data, isLoading } = useUser()
   const { data: subs, isLoading: subsLoading } = useSubs()
 
   const [activeTab, setActiveTab] = useState(1)
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const currentSub = subs?.[activeTab - 1].id || 0
 
   const handleCreateInvoice = (subType: number) => {
+    setIsProcessing(true)
+    const toastId = toast.loading('Загрузка...')
     console.log('handleCreateInvoice', subType)
     if (subType === 1) {
-      return subscriptionService.getFreeSubscription()
+      return subscriptionService.getFreeSubscription().then(resp => {
+        queryClient.invalidateQueries({
+          queryKey: ['user'],
+          refetchType: 'active'
+        })
+
+        toast.success('Подписка успешно активирована!', {
+          id: toastId
+        })
+
+        setIsProcessing(false)
+      })
     }
+
+    setIsProcessing(true)
 
     invoiceService
       .getInvoice({
         subTypeId: subType
       })
       .then(resp => {
-        console.log(resp)
-
-        if (!resp.data.ok) {
-          toast.error(resp.data.errorMessage)
+        if (!resp.data.ok || !resp.data.result) {
+          toast.error(resp.data.errorMessage, {
+            id: toastId
+          })
           return
         }
 
-        webApp?.openInvoice(resp.data.result)
+        webApp?.openInvoice(resp.data.result, invoiceClosed => {
+          if (invoiceClosed === 'paid') {
+            toast.success('Подписка успешно активирована!', {
+              id: toastId
+            })
+            queryClient.invalidateQueries({
+              queryKey: ['user'],
+              refetchType: 'active'
+            })
+            return
+          }
+
+          if (invoiceClosed === 'failed') {
+            toast.error('Произошла ошибка оплаты. Попробуйте ещё раз!!', {
+              id: toastId
+            })
+          }
+
+          setIsProcessing(false)
+        })
       })
       .catch(e => {
-        toast.error(e.message)
+        toast.error(e.message, {
+          id: toastId
+        })
       })
   }
 
@@ -91,7 +137,9 @@ export default function Home() {
         <ButtonSkeleton />
       ) : (
         <button
+          disabled={isProcessing}
           className={clsx(
+            isProcessing && 'disabled:opacity-50',
             'w-full h-14 font-medium rounded-xl',
             currentSub > 1
               ? 'bg-primary text-white border-primary'

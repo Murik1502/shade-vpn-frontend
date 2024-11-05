@@ -6,6 +6,8 @@ export interface ITelegramUser {
   language_code: string
 }
 
+export type IInvoiceStatus = 'paid' | 'cancelled' | 'pending' | 'failed'
+
 export interface IWebApp {
   initData: string
   initDataUnsafe: {
@@ -55,6 +57,6 @@ export interface IWebApp {
     ): { error: string | null; isSuccess: boolean }
   }
   HapticFeedback: any
-  openInvoice: any
+  openInvoice(url: string, callback?: (status: IInvoiceStatus) => void): void
   disableVerticalSwipes: any
 }

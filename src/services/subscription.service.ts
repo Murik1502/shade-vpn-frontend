@@ -5,7 +5,7 @@ import { axiosWithAuth } from '@/api/interceptors'
 class SubscriptionService {
   private BASE_URL = '/subscription'
   async getFreeSubscription() {
-    return await axiosWithAuth.post(this.BASE_URL, 'free')
+    return await axiosWithAuth.post(`${this.BASE_URL}/free`)
   }
 
   async getAllSubs() {
