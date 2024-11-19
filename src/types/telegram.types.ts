@@ -59,4 +59,5 @@ export interface IWebApp {
   HapticFeedback: any
   openInvoice(url: string, callback?: (status: IInvoiceStatus) => void): void
   disableVerticalSwipes: any
+  requestFullscreen: any
 }

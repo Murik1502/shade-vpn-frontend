@@ -43,6 +43,7 @@ export default function Providers({ children }: PropsWithChildren) {
       app.ready()
       setWebApp(app)
       app.disableVerticalSwipes()
+      app.requestFullscreen()
       const { initDataRaw } = retrieveLaunchParams()
       setInitDataRaw(initDataRaw)
     }
