@@ -4,6 +4,13 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
+
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
+ARG NEXT_PUBLIC_DOMAIN
+ENV NEXT_PUBLIC_DOMAIN=$NEXT_PUBLIC_DOMAIN
+
 RUN npm run build
 
 
@@ -12,6 +19,7 @@ FROM node:current-alpine3.20 AS PRODUCTION_STAGE
 WORKDIR /app
 COPY --from=BUILD_IMAGE /app/package*.json ./
 COPY --from=BUILD_IMAGE /app/.next ./.next
+COPY --from=BUILD_IMAGE /app/public ./public
 COPY --from=BUILD_IMAGE /app/node_modules ./node_modules
 ENV NODE_ENV=production
 
